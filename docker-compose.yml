@@ -1,0 +1,27 @@
+# docker-compose
+version: "3"
+services:
+  # database
+  go-api-database:
+    build: ./database/
+    container_name: go-api-database
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_ROOT_PASSWORD: ""
+    ports:
+      - "33061:3306"
+    volumes:
+      - ./database/sql:/docker-entrypoint-initdb.d
+      - ./database/my.cnf:/etc/mysql/conf.d/my.cnf
+  # matome-api
+  go-api:
+    build: .
+    container_name: go-api
+    links:
+      - go-api-database:database
+    ports:
+      - "8080:8080"
+    tty: true
+    volumes:
+      - ".bashrc:/root/.bashrc"
+      - ".:/go/src/github.com/yk2220s/go-rest-sample:cached"
