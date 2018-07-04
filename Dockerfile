@@ -1,5 +1,7 @@
 FROM golang
 MAINTAINER yk2220s
-ADD . /go/src/
 EXPOSE 8080
-CMD ["/usr/local/go/bin/go", "run", "/go/src/server.go"]
+WORKDIR /go/src/github.com/yk2220s/go-rest-sample
+ADD . /go/src/github.com/yk2220s/go-rest-sample
+RUN /usr/local/go/bin/go get -u github.com/kardianos/govendor
+CMD ["/usr/local/go/bin/go", "run", "/go/src/github.com/yk2220s/go-rest-sample/main.go"]
