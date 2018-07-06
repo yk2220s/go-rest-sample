@@ -16,3 +16,5 @@ sample restful api with golang.
 - `$ docker exec -it go-api bash`
 - `$ governdor sync`
     - install dependent packages
+- `$ go run database/migrate.go`
+    - migrate database
