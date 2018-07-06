@@ -1,9 +1,10 @@
 package main
 
 import (
-    "net/http"
+	"net/http"
+
 	"github.com/gin-gonic/gin"
-    "github.com/yk2220s/go-rest-sample/api/controller"
+	"github.com/yk2220s/go-rest-sample/api/controller"
 )
 
 func setupRouter() *gin.Engine {
@@ -11,23 +12,23 @@ func setupRouter() *gin.Engine {
 	// gin.DisableConsoleColor()
 	r := gin.Default()
 
-    // Ping test
+	// Ping test
 	r.GET("/", func(c *gin.Context) {
 		c.String(http.StatusOK, "ok")
 	})
 
-    // Ping test
+	// Ping test
 	r.GET("/ping", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"ping": "pong"})
 	})
 
-    // User resource.
-    r.GET("/users", controller.UserList)
+	// User resource.
+	r.GET("/users", controller.UserList)
 
-    r.GET("/users/:id", func(c *gin.Context) {
-        id := c.Params.ByName("id")
-        c.JSON(http.StatusOK, gin.H{"userId": id})
-    })
+	r.GET("/users/:id", func(c *gin.Context) {
+		id := c.Params.ByName("id")
+		c.JSON(http.StatusOK, gin.H{"userId": id})
+	})
 
 	return r
 }
