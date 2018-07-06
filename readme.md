@@ -9,5 +9,7 @@ sample restful api with golang.
 - realize 2.0.2
 
 # setup
-- ``$ governdor sync`
+- `$ docker-compose up -d`
+- `$ docker exec -it go-api bash`
+- `$ governdor sync`
     - install dependent packages
