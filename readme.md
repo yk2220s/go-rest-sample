@@ -10,6 +10,7 @@ sample restful api with golang.
 - govendor v1.0.9
 - realize 2.0.2
 - goam v1.9.1
+- godotenv v1.2.0
 
 # setup
 - `$ docker-compose up -d`
