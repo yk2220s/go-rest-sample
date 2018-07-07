@@ -7,7 +7,7 @@ sample restful api with golang.
 
 # package
 - gin gonic 1.2
-- govendor v1.0.9
+- dep v1.0.9
 - realize 2.0.2
 - goam v1.9.1
 - godotenv v1.2.0
@@ -15,7 +15,7 @@ sample restful api with golang.
 # setup
 - `$ docker-compose up -d`
 - `$ docker exec -it go-api bash`
-- `$ governdor sync`
+- `$ dep ensure`
     - install dependent packages
 - `$ go run database/migrate.go`
     - migrate database
