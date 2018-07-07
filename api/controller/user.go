@@ -2,6 +2,7 @@ package controller
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 
@@ -25,7 +26,7 @@ func GetUser(c *gin.Context) {
 	db := database.Open()
 	defer db.Close()
 
-	userID := c.Params.ByName("id")
+	userID, _ := strconv.Atoi(c.Params.ByName("id"))
 
 	var user model.User
 	if db.First(&user, userID).RecordNotFound() {
