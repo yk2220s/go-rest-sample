@@ -1,38 +1,23 @@
 package main
 
 import (
-	"fmt"
-
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/jinzhu/gorm"
 
+	"github.com/yk2220s/go-rest-sample/api/database"
 	"github.com/yk2220s/go-rest-sample/api/model"
 	"github.com/yk2220s/go-rest-sample/env"
 )
 
 func main() {
-	mysqlSetting := createMySQLSetting()
-	db, err := gorm.Open("mysql", mysqlSetting)
+	db := database.OpenWithDBName("")
+	defer db.Close()
 
-	if err != nil {
-		fmt.Println(err)
-	}
+	db.Exec("CREATE DATABASE IF NOT EXISTS " + env.GetValue("DB_NAME"))
+	db.Exec("USE " + env.GetValue("DB_NAME"))
 
-	db.DropTable(&model.User{})
+	db.DropTableIfExists(&model.User{})
 	db.Set("gorm:table_options", "ENGINE=InnoDB").AutoMigrate(&model.User{})
 
-	defer db.Close()
-}
-
-func createMySQLSetting() string {
-	return env.GetValue("DB_USER") +
-		":" +
-		env.GetValue("DB_PASSWORD") +
-		"@tcp(" +
-		env.GetValue("DB_HOST") +
-		":" +
-		env.GetValue("DB_PORT") +
-		")/" +
-		env.GetValue("DB_NAME") +
-		"?charset=utf8mb4&parseTime=True&loc=Local"
+	cu := model.User{Name: "Ponta"}
+	db.Create(&cu)
 }
