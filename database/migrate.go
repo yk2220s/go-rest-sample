@@ -32,5 +32,7 @@ func createMySQLSetting() string {
 		env.GetValue("DB_HOST") +
 		":" +
 		env.GetValue("DB_PORT") +
-		")/testing?charset=utf8mb4&parseTime=True&loc=Local"
+		")/" +
+		env.GetValue("DB_NAME") +
+		"?charset=utf8mb4&parseTime=True&loc=Local"
 }
