@@ -1,7 +1,9 @@
 package api
 
 import (
+	"io"
 	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
 	"github.com/yk2220s/go-rest-sample/api/controller"
@@ -11,6 +13,10 @@ import (
 func SetupRouter() *gin.Engine {
 	// Disable Console Color
 	// gin.DisableConsoleColor()
+
+	errlogfile, _ := os.Create("error.log")
+	gin.DefaultErrorWriter = io.MultiWriter(errlogfile)
+
 	r := gin.Default()
 
 	// Index
