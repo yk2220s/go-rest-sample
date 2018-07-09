@@ -7,7 +7,7 @@ import (
 
 // UserRepository access UserEntity
 type UserRepository interface {
-	List(page int64) ([]*model.User, error)
+	List(page int) ([]*model.User, error)
 	// GetByID(id int64) (*model.User, error)
 	// Store(user *model.User) (int64, error)
 	// Update(user *model.User) (*model.User, error)
@@ -18,7 +18,7 @@ type UserRepository interface {
 func UserRepositoryFactory() UserRepository {
 	repo := UserRepositoryImpl{}
 
-	return repo
+	return &repo
 }
 
 // UserRepositoryImpl implements interface.
@@ -26,12 +26,15 @@ type UserRepositoryImpl struct {
 }
 
 // List fetches list of users.
-func (repo UserRepositoryImpl) List(page int64) ([]*model.User, error) {
+func (repo *UserRepositoryImpl) List(page int) ([]*model.User, error) {
 	db := database.Open()
 	defer db.Close()
 
 	var users []*model.User
-	db.Find(&users)
+
+	limit := 10
+	offset := limit * (page - 1)
+	db.Limit(limit).Offset(offset).Find(&users)
 
 	return users, nil
 }

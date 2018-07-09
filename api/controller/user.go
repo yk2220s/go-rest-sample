@@ -15,7 +15,9 @@ import (
 func ListUser(c *gin.Context) {
 	var repo repository.UserRepository
 	repo = repository.UserRepositoryFactory()
-	users, _ := repo.List(1)
+
+	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
+	users, _ := repo.List(page)
 
 	c.JSON(http.StatusOK, gin.H{"users": users})
 }
