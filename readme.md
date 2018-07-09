@@ -9,7 +9,7 @@ sample restful api with golang.
 - gin gonic 1.2
 - dep v1.0.9
 - realize 2.0.2
-- goam v1.9.1
+- gorm v1.9.1
 - godotenv v1.2.0
 
 # setup

@@ -50,6 +50,7 @@ func (repo *UserRepositoryImpl) GetByID(userID int) (*model.User, derror.DomainE
 	defer db.Close()
 
 	var user model.User
+
 	if db.First(&user, userID).RecordNotFound() {
 		return nil, derror.NewNotFound()
 	}
