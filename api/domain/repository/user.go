@@ -11,7 +11,7 @@ type UserRepository interface {
 	List(page int) ([]*model.User, error)
 	GetByID(userID int) (*model.User, derror.DomainError)
 	Store(user *model.User) (*model.User, error)
-	// Update(user *model.User) (*model.User, error)
+	Update(user *model.User) (*model.User, error)
 	// Delete(id int64) (bool, error)
 }
 
@@ -64,6 +64,18 @@ func (repo *UserRepositoryImpl) Store(user *model.User) (*model.User, error) {
 	defer db.Close()
 
 	if err := db.Create(&user).Error; err != nil {
+		return nil, err
+	}
+
+	return user, nil
+}
+
+// Update update user model
+func (repo *UserRepositoryImpl) Update(user *model.User) (*model.User, error) {
+	db := database.Open()
+	defer db.Close()
+
+	if err := db.Save(&user).Error; err != nil {
 		return nil, err
 	}
 

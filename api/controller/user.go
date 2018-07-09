@@ -6,7 +6,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/yk2220s/go-rest-sample/api/database"
 	"github.com/yk2220s/go-rest-sample/api/domain/model"
 	"github.com/yk2220s/go-rest-sample/api/domain/repository"
 )
@@ -67,10 +66,10 @@ func (controller UserController) CreateUser(c *gin.Context) {
 		Email: puser.User.Email,
 	}
 
-	newUser, rerr := controller.uRepository.Store(&user)
+	newUser, cerr := controller.uRepository.Store(&user)
 
-	if rerr != nil {
-		c.IndentedJSON(http.StatusOK, gin.H{"error": rerr.Error()})
+	if cerr != nil {
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": cerr.Error()})
 		return
 	}
 
@@ -85,27 +84,30 @@ type paramPatchUser struct {
 }
 
 // UpdateUser create User record.
-func UpdateUser(c *gin.Context) {
-	db := database.Open()
-	defer db.Close()
+func (controller UserController) UpdateUser(c *gin.Context) {
+	var puser paramPatchUser
+
+	if err := c.ShouldBindJSON(&puser); err != nil {
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
 
 	userID, _ := strconv.Atoi(c.Params.ByName("id"))
+	user, gerr := controller.uRepository.GetByID(userID)
 
-	var puser paramPatchUser
-	if err := c.ShouldBindJSON(&puser); err == nil {
-		var user model.User
-		if db.First(&user, userID).RecordNotFound() {
-			c.JSON(http.StatusNotFound, gin.H{"user": nil})
-			return
-		}
-
-		user.Name = puser.User.Name
-		user.Email = puser.User.Email
-
-		db.Save(&user)
-
-		c.JSON(http.StatusOK, gin.H{"user": user})
-	} else {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	if gerr != nil {
+		c.IndentedJSON(gerr.StatusCode(), gin.H{"user": nil})
 	}
+
+	user.Name = puser.User.Name
+	user.Email = puser.User.Email
+
+	newUser, uerr := controller.uRepository.Update(user)
+
+	if uerr != nil {
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": uerr.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"user": newUser})
 }
