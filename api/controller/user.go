@@ -8,15 +8,14 @@ import (
 
 	"github.com/yk2220s/go-rest-sample/api/database"
 	"github.com/yk2220s/go-rest-sample/api/model"
+	"github.com/yk2220s/go-rest-sample/api/repository"
 )
 
 // ListUser fetch List of users
 func ListUser(c *gin.Context) {
-	db := database.Open()
-	defer db.Close()
-
-	var users []model.User
-	db.Find(&users)
+	var repo repository.UserRepository
+	repo = repository.UserRepositoryFactory()
+	users, _ := repo.List(1)
 
 	c.JSON(http.StatusOK, gin.H{"users": users})
 }
