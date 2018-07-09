@@ -11,13 +11,24 @@ import (
 	"github.com/yk2220s/go-rest-sample/api/domain/repository"
 )
 
-// ListUser fetch List of users
-func ListUser(c *gin.Context) {
-	var repo repository.UserRepository
-	repo = repository.UserRepositoryFactory()
+// UserController is present data to show.
+type UserController struct {
+	uRepository repository.UserRepository
+}
 
+// UserControllerFactory create UserController injected depency
+func UserControllerFactory() UserController {
+	var urepo repository.UserRepository
+	urepo = repository.UserRepositoryFactory()
+
+	return UserController{urepo}
+}
+
+// ListUser fetch List of users
+func (controller UserController) ListUser(c *gin.Context) {
 	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
-	users, _ := repo.List(page)
+
+	users, _ := controller.uRepository.List(page)
 
 	c.JSON(http.StatusOK, gin.H{"users": users})
 }
