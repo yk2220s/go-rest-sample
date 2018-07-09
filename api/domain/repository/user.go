@@ -2,7 +2,7 @@ package repository
 
 import (
 	"github.com/yk2220s/go-rest-sample/api/database"
-	"github.com/yk2220s/go-rest-sample/api/model"
+	"github.com/yk2220s/go-rest-sample/api/domain/model"
 )
 
 // UserRepository access UserEntity

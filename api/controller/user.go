@@ -7,8 +7,8 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"github.com/yk2220s/go-rest-sample/api/database"
-	"github.com/yk2220s/go-rest-sample/api/model"
-	"github.com/yk2220s/go-rest-sample/api/repository"
+	"github.com/yk2220s/go-rest-sample/api/domain/model"
+	"github.com/yk2220s/go-rest-sample/api/domain/repository"
 )
 
 // ListUser fetch List of users
