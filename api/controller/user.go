@@ -30,7 +30,7 @@ func (controller UserController) ListUser(c *gin.Context) {
 
 	users, _ := controller.uRepository.List(page)
 
-	c.JSON(http.StatusOK, gin.H{"users": users})
+	c.IndentedJSON(http.StatusOK, gin.H{"users": users})
 }
 
 // GetUser fetch List of users
@@ -40,9 +40,9 @@ func (controller UserController) GetUser(c *gin.Context) {
 	user, err := controller.uRepository.GetByID(userID)
 
 	if err == nil {
-		c.JSON(http.StatusOK, gin.H{"user": user})
+		c.IndentedJSON(http.StatusOK, gin.H{"user": user})
 	} else {
-		c.JSON(err.StatusCode(), gin.H{"user": nil})
+		c.IndentedJSON(err.StatusCode(), gin.H{"user": nil})
 	}
 }
 
@@ -54,22 +54,27 @@ type paramPostUser struct {
 }
 
 // CreateUser create User record.
-func CreateUser(c *gin.Context) {
-	db := database.Open()
-	defer db.Close()
-
+func (controller UserController) CreateUser(c *gin.Context) {
 	var puser paramPostUser
-	if err := c.ShouldBindJSON(&puser); err == nil {
-		user := model.User{
-			Name:  puser.User.Name,
-			Email: puser.User.Email,
-		}
-		db.Create(&user)
 
-		c.JSON(http.StatusOK, gin.H{"user": user})
-	} else {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	if err := c.ShouldBindJSON(&puser); err != nil {
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
 	}
+
+	user := model.User{
+		Name:  puser.User.Name,
+		Email: puser.User.Email,
+	}
+
+	newUser, rerr := controller.uRepository.Store(&user)
+
+	if rerr != nil {
+		c.IndentedJSON(http.StatusOK, gin.H{"error": rerr.Error()})
+		return
+	}
+
+	c.IndentedJSON(http.StatusOK, gin.H{"user": newUser})
 }
 
 type paramPatchUser struct {
