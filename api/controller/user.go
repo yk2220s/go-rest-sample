@@ -34,17 +34,15 @@ func (controller UserController) ListUser(c *gin.Context) {
 }
 
 // GetUser fetch List of users
-func GetUser(c *gin.Context) {
-	db := database.Open()
-	defer db.Close()
-
+func (controller UserController) GetUser(c *gin.Context) {
 	userID, _ := strconv.Atoi(c.Params.ByName("id"))
 
-	var user model.User
-	if db.First(&user, userID).RecordNotFound() {
-		c.JSON(http.StatusNotFound, gin.H{"user": nil})
-	} else {
+	user, err := controller.uRepository.GetByID(userID)
+
+	if err == nil {
 		c.JSON(http.StatusOK, gin.H{"user": user})
+	} else {
+		c.JSON(err.StatusCode(), gin.H{"user": nil})
 	}
 }
 

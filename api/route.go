@@ -32,7 +32,7 @@ func SetupRouter() *gin.Engine {
 	// User resource.
 	uController := controller.UserControllerFactory()
 	r.GET("/users", uController.ListUser)
-	r.GET("/users/:id", controller.GetUser)
+	r.GET("/users/:id", uController.GetUser)
 	r.POST("/users", controller.CreateUser)
 	r.PATCH("/users/:id", controller.UpdateUser)
 
