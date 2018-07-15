@@ -12,7 +12,7 @@ type UserRepository interface {
 	GetByID(userID int) (*model.User, derror.DomainError)
 	Store(user *model.User) (*model.User, error)
 	Update(user *model.User) (*model.User, error)
-	// Delete(id int64) (bool, error)
+	Delete(userID int) (bool, error)
 }
 
 // UserRepositoryFactory make UserRepository
@@ -80,4 +80,20 @@ func (repo *UserRepositoryImpl) Update(user *model.User) (*model.User, error) {
 	}
 
 	return user, nil
+}
+
+// Update update user model
+func (repo *UserRepositoryImpl) Delete(userID int) (bool, error) {
+	db := database.Open()
+	defer db.Close()
+
+	var user model.User
+
+	if db.First(&user, userID).RecordNotFound() {
+		return false, derror.NewNotFound()
+	}
+
+	db.Delete(&user)
+
+	return true, nil
 }
