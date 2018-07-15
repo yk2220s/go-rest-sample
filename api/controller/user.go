@@ -38,11 +38,12 @@ func (controller UserController) GetUser(c *gin.Context) {
 
 	user, err := controller.uRepository.GetByID(userID)
 
-	if err == nil {
-		c.IndentedJSON(http.StatusOK, gin.H{"user": user})
-	} else {
+	if err != nil {
 		c.IndentedJSON(err.StatusCode(), gin.H{"user": nil})
+		return
 	}
+
+	c.IndentedJSON(http.StatusOK, gin.H{"user": user})
 }
 
 type paramPostUser struct {
