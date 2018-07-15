@@ -82,7 +82,7 @@ func (repo *UserRepositoryImpl) Update(user *model.User) (*model.User, error) {
 	return user, nil
 }
 
-// Update update user model
+// Delete delete user model
 func (repo *UserRepositoryImpl) Delete(userID int) (bool, error) {
 	db := database.Open()
 	defer db.Close()
