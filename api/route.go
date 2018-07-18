@@ -6,7 +6,7 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
-	"github.com/yk2220s/go-rest-sample/api/controller"
+	"github.com/yk2220s/go-rest-sample/api/application/controller"
 )
 
 // SetupRouter is return router.
@@ -18,6 +18,9 @@ func SetupRouter() *gin.Engine {
 	gin.DefaultErrorWriter = io.MultiWriter(errlogfile)
 
 	r := gin.Default()
+
+	// Register Error Handler
+	// r.Use(handleErrors)
 
 	// Index
 	r.GET("/", func(c *gin.Context) {
