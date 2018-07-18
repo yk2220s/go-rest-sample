@@ -112,3 +112,8 @@ func (controller UserController) UpdateUser(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"user": newUser})
 }
+
+// DeleteUser create User record.
+func (controller UserController) Delete(c *gin.Context) {
+	c.JSON(http.StatusOK, gin.H{"success": true})
+}
