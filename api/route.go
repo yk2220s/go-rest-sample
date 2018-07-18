@@ -7,6 +7,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/yk2220s/go-rest-sample/api/application/controller"
+	"github.com/yk2220s/go-rest-sample/api/application/middleware"
 )
 
 // SetupRouter is return router.
@@ -19,8 +20,8 @@ func SetupRouter() *gin.Engine {
 
 	r := gin.Default()
 
-	// Register Error Handler
-	// r.Use(handleErrors)
+	// Register Middlewares
+	r.Use(middleware.HandleErrors)
 
 	// Index
 	r.GET("/", func(c *gin.Context) {
