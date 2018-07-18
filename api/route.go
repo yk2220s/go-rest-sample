@@ -35,6 +35,7 @@ func SetupRouter() *gin.Engine {
 	r.GET("/users/:id", uController.GetUser)
 	r.POST("/users", uController.CreateUser)
 	r.PATCH("/users/:id", uController.UpdateUser)
+	r.DELETE("/users/:id", uController.DeleteUser)
 
 	return r
 }

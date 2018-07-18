@@ -113,7 +113,16 @@ func (controller UserController) UpdateUser(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"user": newUser})
 }
 
-// DeleteUser create User record.
-func (controller UserController) Delete(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{"success": true})
+// DeleteUser delete User record.
+func (controller UserController) DeleteUser(c *gin.Context) {
+	userID, _ := strconv.Atoi(c.Params.ByName("id"))
+
+	isSuccess, err := controller.uRepository.Delete(userID)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"isSuccess": isSuccess})
 }
