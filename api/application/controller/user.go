@@ -39,7 +39,7 @@ func (controller UserController) GetUser(c *gin.Context) {
 	user, err := controller.uRepository.GetByID(userID)
 
 	if err != nil {
-		c.IndentedJSON(err.StatusCode(), gin.H{"user": nil})
+		c.AbortWithError(err.StatusCode(), err)
 		return
 	}
 
@@ -58,7 +58,7 @@ func (controller UserController) CreateUser(c *gin.Context) {
 	var puser paramPostUser
 
 	if err := c.ShouldBindJSON(&puser); err != nil {
-		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
 
@@ -70,7 +70,7 @@ func (controller UserController) CreateUser(c *gin.Context) {
 	newUser, cerr := controller.uRepository.Store(&user)
 
 	if cerr != nil {
-		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": cerr.Error()})
+		c.AbortWithError(cerr.StatusCode(), cerr)
 		return
 	}
 
@@ -89,7 +89,7 @@ func (controller UserController) UpdateUser(c *gin.Context) {
 	var puser paramPatchUser
 
 	if err := c.ShouldBindJSON(&puser); err != nil {
-		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
 
@@ -97,7 +97,8 @@ func (controller UserController) UpdateUser(c *gin.Context) {
 	user, gerr := controller.uRepository.GetByID(userID)
 
 	if gerr != nil {
-		c.IndentedJSON(gerr.StatusCode(), gin.H{"user": nil})
+		c.AbortWithError(gerr.StatusCode(), gerr)
+		return
 	}
 
 	user.Name = puser.User.Name
@@ -106,7 +107,7 @@ func (controller UserController) UpdateUser(c *gin.Context) {
 	newUser, uerr := controller.uRepository.Update(user)
 
 	if uerr != nil {
-		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": uerr.Error()})
+		c.AbortWithError(uerr.StatusCode(), uerr)
 		return
 	}
 
@@ -120,7 +121,7 @@ func (controller UserController) DeleteUser(c *gin.Context) {
 	isSuccess, err := controller.uRepository.Delete(userID)
 
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.AbortWithError(err.StatusCode(), err)
 		return
 	}
 
