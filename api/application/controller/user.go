@@ -27,7 +27,7 @@ func UserControllerFactory() UserController {
 func (controller UserController) ListUser(c *gin.Context) {
 	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
 
-	users, _ := controller.uRepository.List(page)
+	users := controller.uRepository.List(page)
 
 	c.IndentedJSON(http.StatusOK, gin.H{"users": users})
 }

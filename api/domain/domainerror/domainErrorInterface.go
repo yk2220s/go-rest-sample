@@ -1,4 +1,4 @@
-package derror
+package domainerror
 
 // DomainError is error occured at domain objects.
 type DomainError interface {

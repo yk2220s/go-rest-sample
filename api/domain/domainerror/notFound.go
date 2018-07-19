@@ -1,4 +1,4 @@
-package derror
+package domainerror
 
 import "net/http"
 

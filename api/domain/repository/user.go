@@ -2,14 +2,14 @@ package repository
 
 import (
 	"github.com/yk2220s/go-rest-sample/api/database"
-	"github.com/yk2220s/go-rest-sample/api/domain/derror"
+	"github.com/yk2220s/go-rest-sample/api/domain/domainerror"
 	"github.com/yk2220s/go-rest-sample/api/domain/model"
 )
 
 // UserRepository access UserEntity
 type UserRepository interface {
-	List(page int) ([]*model.User, error)
-	GetByID(userID int) (*model.User, derror.DomainError)
+	List(page int) []*model.User
+	GetByID(userID int) (*model.User, domainerror.DomainError)
 	Store(user *model.User) (*model.User, error)
 	Update(user *model.User) (*model.User, error)
 	Delete(userID int) (bool, error)
@@ -31,7 +31,7 @@ type UserRepositoryImpl struct {
 }
 
 // List fetches list of users
-func (repo *UserRepositoryImpl) List(page int) ([]*model.User, error) {
+func (repo *UserRepositoryImpl) List(page int) []*model.User {
 	db := database.Open()
 	defer db.Close()
 
@@ -41,18 +41,18 @@ func (repo *UserRepositoryImpl) List(page int) ([]*model.User, error) {
 	offset := limit * (page - 1)
 	db.Limit(limit).Offset(offset).Find(&users)
 
-	return users, nil
+	return users
 }
 
 // GetByID fetch user by id
-func (repo *UserRepositoryImpl) GetByID(userID int) (*model.User, derror.DomainError) {
+func (repo *UserRepositoryImpl) GetByID(userID int) (*model.User, domainerror.DomainError) {
 	db := database.Open()
 	defer db.Close()
 
 	var user model.User
 
 	if db.First(&user, userID).RecordNotFound() {
-		return nil, derror.NewNotFound()
+		return nil, domainerror.NewNotFound()
 	}
 
 	return &user, nil
@@ -90,7 +90,7 @@ func (repo *UserRepositoryImpl) Delete(userID int) (bool, error) {
 	var user model.User
 
 	if db.First(&user, userID).RecordNotFound() {
-		return false, derror.NewNotFound()
+		return false, domainerror.NewNotFound()
 	}
 
 	db.Delete(&user)
