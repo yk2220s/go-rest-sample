@@ -13,7 +13,7 @@ services:
     volumes:
       - ./database/sql:/docker-entrypoint-initdb.d
       - ./database/my.cnf:/etc/mysql/conf.d/my.cnf
-  # matome-api
+  # api
   go-api:
     build: .
     container_name: go-api
